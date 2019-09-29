@@ -16,5 +16,13 @@ public class SwitchExample {
 		      break;
 		  }
 		  return result;
-		}	
+		}
+
+	public static int switchExample2(String s) {
+		return switch(s) {
+			case "dog" -> 1;
+			case "cat" -> 2;
+			default -> 4;
+		};
+	}
 }
