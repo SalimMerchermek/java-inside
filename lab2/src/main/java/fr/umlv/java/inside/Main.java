@@ -49,11 +49,17 @@ public class Main {
         }
     }
 
+    private static String annotationHasValue (Method e) {
+        var value = e.getAnnotation(JSONProperty.class).value();
+        return value.isEmpty() ? propertyName (e.getName()) : value ;
+    }
+
     public static String toJSON(Object object) {
         return Arrays.stream(object.getClass().getMethods())
                 .filter(method -> method.getName().startsWith("get"))
+                .filter(method -> method.isAnnotationPresent(JSONProperty.class))
                 .sorted(Comparator.comparing(Method::getName))
-                .map(method -> propertyName (method.getName()) + " : " + getter(object, method))
+                .map(method -> annotationHasValue (method) + " : " + getter(object, method))
                 .collect(joining(",","{","}"));
     }
 

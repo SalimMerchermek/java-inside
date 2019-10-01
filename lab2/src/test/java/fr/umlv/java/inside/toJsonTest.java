@@ -12,12 +12,12 @@ public class toJsonTest {
     @Test
     public void person() {
       var person = new Person("John", "Doe");
-      assertEquals("{class : class fr.umlv.java.inside.toJsonTest$Person,firstName : John,lastName : Doe}", toJSON(person));
+      assertEquals("{Nom : John,lastName : Doe}", toJSON(person));
     }
     @Test
     public void alien() {
         var alien = new Alien("E.T.", 100);
-        assertEquals("{age : 100,class : class fr.umlv.java.inside.toJsonTest$Alien,planet : E.T.}", toJSON(alien));
+        assertEquals("{age : 100,planet : E.T.}", toJSON(alien));
     }
 
     public static class Person {
@@ -28,10 +28,12 @@ public class toJsonTest {
             this.firstName = Objects.requireNonNull(firstName);
             this.lastName = Objects.requireNonNull(lastName);
         }
-
+        @JSONProperty("Nom")
         public String getFirstName() {
             return firstName;
         }
+
+        @JSONProperty
         public String getLastName() {
             return lastName;
         }
@@ -49,10 +51,11 @@ public class toJsonTest {
             this.age = age;
         }
 
+        @JSONProperty
         public String getPlanet() {
             return planet;
         }
-
+        @JSONProperty
         public int getAge() {
             return age;
         }
