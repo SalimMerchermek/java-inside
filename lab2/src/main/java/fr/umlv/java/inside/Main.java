@@ -4,6 +4,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.UndeclaredThrowableException;
 import java.util.Arrays;
+import java.util.Comparator;
+
 import static java.util.stream.Collectors.joining;
 
 public class Main {
@@ -50,6 +52,7 @@ public class Main {
     public static String toJSON(Object object) {
         return Arrays.stream(object.getClass().getMethods())
                 .filter(method -> method.getName().startsWith("get"))
+                .sorted(Comparator.comparing(Method::getName))
                 .map(method -> propertyName (method.getName()) + " : " + getter(object, method))
                 .collect(joining(",","{","}"));
     }
