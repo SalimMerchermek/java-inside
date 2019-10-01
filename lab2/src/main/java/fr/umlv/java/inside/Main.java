@@ -26,6 +26,14 @@ public class Main {
                         "}\n";
     }
   */
+    private final static ClassValue<Method[]> cache = new ClassValue<Method[]>() {
+        @Override
+        protected Method[] computeValue(Class<?> type) {
+            return type.getMethods() ;
+        }
+    };
+
+
     private static String propertyName(String name) {
         return Character.toLowerCase(name.charAt(3)) + name.substring(4);
     }
@@ -55,7 +63,7 @@ public class Main {
     }
 
     public static String toJSON(Object object) {
-        return Arrays.stream(object.getClass().getMethods())
+        return Arrays.stream(cache.get(object.getClass()))
                 .filter(method -> method.getName().startsWith("get"))
                 .filter(method -> method.isAnnotationPresent(JSONProperty.class))
                 .sorted(Comparator.comparing(Method::getName))
