@@ -37,14 +37,14 @@ public class LoggerTests {
         private static final StringBuilder SB = new StringBuilder() ;
         private static final Logger LOGGER = Logger.of(TestB.class, SB::append) ;
     }
-
+/*
     @Test
     public void logDisabled () {
         Logger.enable(TestB.class, false);
         TestB.LOGGER.log("testing");
         assertEquals("", TestB.SB.toString()); ;
     }
-
+*/
     @Test
     public void logEnabled () {
         Logger.enable(TestB.class, true);
