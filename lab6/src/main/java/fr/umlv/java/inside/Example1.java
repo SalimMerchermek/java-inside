@@ -6,40 +6,33 @@ import java.util.List;
 public class Example1 {
     public static void main(String[] args) {
 
-        var scope = new ContinuationScope("hello1") ;
-
-
-        var continuation = new Continuation(scope, () -> {
-
-            System.out.println("enter1");
-            Continuation.yield(scope) ;
-            System.out.println("middle1");
-            Continuation.yield(scope) ;
-            System.out.println("exit1");
-
-        }) ;
-
+        var scope = new ContinuationScope("scope");
+        var scheduler = new Scheduler();
+        var continuation1 = new Continuation(scope, () -> {
+            System.out.println("start 1");
+            scheduler.enqueue(scope);
+            System.out.println("middle 1");
+            scheduler.enqueue(scope);
+            System.out.println("end 1");
+        });
         var continuation2 = new Continuation(scope, () -> {
-            System.out.println("enter2");
-            Continuation.yield(scope) ;
-            System.out.println("exit2");
-        }) ;
+            System.out.println("start 2");
+            scheduler.enqueue(scope);
+            System.out.println("middle 2");
+            scheduler.enqueue(scope);
+            System.out.println("end 2");
+        });
 
         var continuation3 = new Continuation(scope, () -> {
-            System.out.println("enter3");
-            Continuation.yield(scope) ;
-            System.out.println("exit3");
-        }) ;
-
-        var list  = List.of(continuation, continuation2, continuation3) ;
-
-        var arrayDequ = new ArrayDeque<>(list) ;
-
-        while (!arrayDequ.isEmpty()) {
-            var cont = arrayDequ.poll() ;
-            cont.run();
-            if (!cont.isDone()) arrayDequ.offer(cont);
-        }
+            System.out.println("start 3");
+            scheduler.enqueue(scope);
+            System.out.println("middle 3");
+            scheduler.enqueue(scope);
+            System.out.println("end 3");
+        });
+        var list = List.of(continuation1, continuation2, continuation3);
+        list.forEach(Continuation::run);
+        scheduler.runLoop();
 
     }
 
