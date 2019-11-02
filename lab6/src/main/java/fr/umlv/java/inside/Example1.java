@@ -7,7 +7,7 @@ public class Example1 {
     public static void main(String[] args) {
 
         var scope = new ContinuationScope("scope");
-        var scheduler = new Scheduler();
+        var scheduler = new Scheduler(Scheduler.State.STACK);
         var continuation1 = new Continuation(scope, () -> {
             System.out.println("start 1");
             scheduler.enqueue(scope);
@@ -33,7 +33,6 @@ public class Example1 {
         var list = List.of(continuation1, continuation2, continuation3);
         list.forEach(Continuation::run);
         scheduler.runLoop();
-
     }
 
 }
